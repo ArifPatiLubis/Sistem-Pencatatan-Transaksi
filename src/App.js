@@ -10,9 +10,9 @@ function App() {
   return (
     <div className="App">
       <Header/>
-      <Sidebar/>
       <Dashboard/>
       <Footer/>
+      <Sidebar/>
     </div>
   );
 }
