@@ -1,19 +1,20 @@
-import React, {} from 'react';
-import './App.css';
+import React from "react";
+import { BrowserRouter as Router, useRoutes } from "react-router-dom";
+import { AuthProvider } from "./context/authContext/index";
+import AppRoutes from './routes';
 
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-import Sidebar from "./components/Sidebar";
-import Dashboard from "./components/Dashboard";
 
 function App() {
   return (
-    <div className="App">
-      <Header/>
-      <Dashboard/>
-      <Footer/>
-      <Sidebar/>
-    </div>
+    <AuthProvider>
+      <Router>
+        <div className="w-full h-screen flex">
+          <div className="flex-grow">
+            <AppRoutes />
+          </div>
+        </div>
+      </Router>
+    </AuthProvider>
   );
 }
 
