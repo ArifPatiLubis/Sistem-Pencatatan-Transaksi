@@ -1,15 +1,22 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useState } from 'react';
+import { useNavigate, NavLink } from 'react-router-dom'
 import { useAuth } from '../../../../context/authContext'
 import { doSignOut } from '../../../../firebase/auth'
+import { Button } from 'primereact/button';
 import Header from "../../../../components/user/header";
 import Footer from "../../../../components/user/footer";
 import Sidebar from "../../../../components/user/sidebar";
+import TableMyPartyActivity from '../../tables/my-party-activity';
 
 const MyActivity = () => {
     const navigate = useNavigate()
     const { userLoggedIn, currentUser } = useAuth()
-    
+
+    const [totalReceiveAmount, setTotalReceiveAmount] = useState(0);
+
+    const formatAmount = (amount) => {
+        return new Intl.NumberFormat('en-US', { style: 'decimal', minimumFractionDigits: 2 }).format(amount);
+    };
 
     return (
       <div className="flex">
@@ -26,6 +33,29 @@ const MyActivity = () => {
                 <div className="container-fluid">
                     <div className="row">
                         <div className="col">
+                        <div className="invoice p-3 mb-3">
+                        <div className="row">
+                            <div className="col-12">
+                                <div className="d-flex justify-content-between align-items-center">
+                                    <h3 className="card-title">
+                                        <b>My Available Amount</b>
+                                    </h3>
+                                    <NavLink to="/admin/activities/party/add">
+                                        <Button label="Withdraw" severity="help" icon="pi pi-money-bill" />
+                                    </NavLink>
+                                </div>
+                                </div>
+                            </div>
+                            <div className="row invoice-info mt-2">
+                                <div className="col-sm-4 invoice-col">
+                                <address>
+                                <strong>Crows Token</strong>
+                                <br />
+                                <h3 style={{marginTop: "10px", marginLeft:"15px"}}>{totalReceiveAmount}</h3>
+                                </address>
+                                </div>
+                            </div>
+                        </div>
                             <div className="card">
                                 <div className="card-header border-0">
                                 <div className="d-flex justify-content-between">
@@ -33,36 +63,7 @@ const MyActivity = () => {
                                     {/* <a href="javascript:void(0);">View Report</a> */}
                                 </div>
                                 </div>
-                                <div className="card-body table-responsive p-0" style={{height: 300}}>
-                                    <table className="table table-head-fixed text-nowrap">
-                                        <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Date</th>
-                                            <th>Boss</th>
-                                            <th>Item</th>
-                                            <th>Crows</th>
-                                            <th>Minted</th>
-                                            <th>Party Member</th>
-                                            <th>Receive Amount</th>
-                                            <th>Description</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>11-7-2014</td>
-                                            <td>Grish</td>
-                                            <td>Pitch-black Armor Enhancement Scroll</td>
-                                            <td>14</td>
-                                            <td>No</td>
-                                            <td>Grisha, Weath</td>
-                                            <td>0.8</td>
-                                            <td>This Party is Awesome</td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                <TableMyPartyActivity setTotalReceiveAmount={setTotalReceiveAmount}></TableMyPartyActivity>
                             </div>
                         </div>
                     </div>

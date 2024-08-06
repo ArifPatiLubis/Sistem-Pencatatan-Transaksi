@@ -6,7 +6,7 @@ import FetchMembers from '../../../components/admin/fetchmember';
 import { ref, push } from "firebase/database";
 import { database } from "../../../firebase/firebase";
 import { format } from 'date-fns';
-
+import { Button } from 'primereact/button';
 
 
 const FormInputRaid = () => {
@@ -125,7 +125,7 @@ const FormInputRaid = () => {
                 </div>
             </div>
             <div className="card-footer">
-                <button type="submit" className="btn btn-secondary">Submit</button>
+                <Button label="Save" severity="help" icon="pi pi-save" type="submit"></Button>
             </div>
         </form>
     );

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Navigate, Link, NavLink } from 'react-router-dom'
+import { useNavigate, Link, NavLink } from 'react-router-dom'
 import { doSignInWithEmailAndPassword, doSignInWithGoogle } from '../../firebase/auth'
 import { useAuth } from '../../context/authContext'
 
@@ -10,23 +10,51 @@ const Login = () => {
     const [password, setPassword] = useState('')
     const [isSigningIn, setIsSigningIn] = useState(false)
     const [errorMessage, setErrorMessage] = useState('')
+    const navigate = useNavigate();
 
     const onSubmit = async (e) => {
-        e.preventDefault()
-        if(!isSigningIn) {
-            setIsSigningIn(true)
-            await doSignInWithEmailAndPassword(email, password)
-            // doSendEmailVerification()
+        e.preventDefault();
+        if (!isSigningIn) {
+            setIsSigningIn(true);
+            try {
+                const { user, verified, role } = await doSignInWithEmailAndPassword(email, password);
+
+                if (!verified) {
+                    navigate('/wverification');
+                } else {
+                    if (role === 'admin') {
+                        navigate('/admin/dashboard');
+                    } else {
+                        navigate('/user/dashboard');
+                    }
+                }
+            } catch (error) {
+                setErrorMessage(error.message);
+                setIsSigningIn(false);
+            }
         }
     }
 
-    const onGoogleSignIn = (e) => {
-        e.preventDefault()
+    const onGoogleSignIn = async (e) => {
+        e.preventDefault();
         if (!isSigningIn) {
-            setIsSigningIn(true)
-            doSignInWithGoogle().catch(err => {
-                setIsSigningIn(false)
-            })
+            setIsSigningIn(true);
+            try {
+                const { user, verified, role } = await doSignInWithGoogle();
+
+                if (!verified) {
+                    navigate('/verification');
+                } else {
+                    if (role === 'admin') {
+                        navigate('/admin/dashboard');
+                    } else {
+                        navigate('/user/dashboard');
+                    }
+                }
+            } catch (error) {
+                setErrorMessage(error.message);
+                setIsSigningIn(false);
+            }
         }
     }
 

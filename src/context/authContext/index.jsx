@@ -13,23 +13,32 @@ export function AuthProvider({ children }) {
     const [currentUser, setCurrentUser] = useState(null);
     const [userLoggedIn, setUserLoggedIn] = useState(false);
     const [userRole, setUserRole] = useState(null);
+    const [userVerified, setUserVerified] = useState(false); // Tambahkan status verifikasi
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const initializeUser = async (user) => {
-            setCurrentUser(user);
             if (user) {
-                const userRef = ref(database, `users/${user.uid}/role`);
+                setCurrentUser(user);
+
+                // Ambil role dan status verifikasi dari database
+                const userRef = ref(database, `users/${user.uid}`);
                 const snapshot = await get(userRef);
+
                 if (snapshot.exists()) {
-                    setUserRole(snapshot.val());
+                    const userData = snapshot.val();
+                    setUserRole(userData.role);
+                    setUserVerified(userData.verified || false);
                 } else {
-                    console.error("No role found for the user.");
+                    console.error("No data found for the user.");
                 }
+
                 setUserLoggedIn(true);
             } else {
+                setCurrentUser(null);
                 setUserLoggedIn(false);
                 setUserRole(null);
+                setUserVerified(false); // Reset status verifikasi saat tidak ada pengguna
             }
             setLoading(false);
         };
@@ -42,6 +51,7 @@ export function AuthProvider({ children }) {
         currentUser,
         userLoggedIn,
         userRole,
+        userVerified, // Sertakan status verifikasi di value
         loading,
     };
 

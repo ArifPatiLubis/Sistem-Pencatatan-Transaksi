@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, NavLink } from 'react-router-dom'
 import { useAuth } from '../../../../context/authContext'
 import { doSignOut } from '../../../../firebase/auth'
+import { Button } from 'primereact/button';
 import Header from "../../../../components/admin/header";
 import Footer from "../../../../components/admin/footer";
 import Sidebar from "../../../../components/admin/sidebar";
@@ -33,20 +34,24 @@ const MyActivity = () => {
                     <div className="row">
                         <div className="col">
                         <div className="invoice p-3 mb-3">
-                            <div className="row">
-                                <div className="col-12">
-                                <h3 className="card-title">
-                                    <b>My Avalaible Amount</b>
-                                    
-                                    {/* <small className="float-right">Date: 2/10/2014</small> */}
-                                </h3>
+                        <div className="row">
+                            <div className="col-12">
+                                <div className="d-flex justify-content-between align-items-center">
+                                    <h3 className="card-title">
+                                        <b>My Available Amount</b>
+                                    </h3>
+                                    <NavLink to="/admin/activities/party/add">
+                                        <Button label="Withdraw" severity="help" icon="pi pi-money-bill" />
+                                    </NavLink>
+                                </div>
                                 </div>
                             </div>
-                            <div className="row invoice-info mt-4">
+                            <div className="row invoice-info mt-2">
                                 <div className="col-sm-4 invoice-col">
                                 <address>
-                                <strong>Crowns Token</strong><br />
-                                {totalReceiveAmount}
+                                <strong>Crows Token</strong>
+                                <br />
+                                <h3 style={{marginTop: "10px", marginLeft:"15px"}}>{totalReceiveAmount}</h3>
                                 </address>
                                 </div>
                             </div>

@@ -4,6 +4,7 @@ import { useAuth } from '../../../../context/authContext'
 import Header from "../../../../components/admin/header";
 import Footer from "../../../../components/admin/footer";
 import Sidebar from "../../../../components/admin/sidebar";
+import { Button } from 'primereact/button';
 import FormInputRaid from '../../forms/form-input-raid-info';
 
 const AddActivity = () => {

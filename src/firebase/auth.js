@@ -9,11 +9,11 @@ export const doCreateUserWithEmailAndPassword = async (email, password, username
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
-        // Save the user data with role and username to the Realtime Database
         await set(ref(database, 'users/' + user.uid), {
             email: user.email,
             username: username,
-            role: role
+            role: role,
+            verified: false  // default verification status
         });
 
         return user;
@@ -24,40 +24,54 @@ export const doCreateUserWithEmailAndPassword = async (email, password, username
 }
 
 export const doSignInWithEmailAndPassword = async (email, password) => {
-    const result = await signInWithEmailAndPassword(auth, email, password);
-    const user = result.user;
+    try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
 
-    // Fetch user role from database
-    const userRef = ref(database, `users/${user.uid}`);
-    const snapshot = await get(userRef);
+        // Ambil status verifikasi pengguna
+        const snapshot = await get(ref(database, 'users/' + user.uid));
+        const userData = snapshot.val();
 
-    if (!snapshot.exists()) {
-        throw new Error('No role found for the user.');
+        return {
+            user,
+            verified: userData.verified,
+            role: userData.role
+        };
+    } catch (error) {
+        console.error("Error signing in:", error);
+        throw error;
     }
-
-    const userData = snapshot.val();
-    return { user, role: userData.role };
 }
 
 export const doSignInWithGoogle = async () => {
-    const provider = new GoogleAuthProvider();
-    const result = await signInWithPopup(auth, provider);
-    const user = result.user;
-   
-    // Periksa apakah pengguna sudah ada di database
-    const userRef = ref(database, `users/${user.uid}`);
-    const snapshot = await get(userRef);
+    try {
+        const provider = new GoogleAuthProvider();
+        const userCredential = await signInWithPopup(auth, provider);
+        const user = userCredential.user;
 
-    if (!snapshot.exists()) {
-        // Tambahkan pengguna baru dengan peran default (misalnya 'user')
-        await set(userRef, {
-            email: user.email,
-            username: user.displayName,
-            role: 'user'
-        });
+        const userRef = ref(database, `users/${user.uid}`);
+        const snapshot = await get(ref(database, 'users/' + user.uid));
+        const userData = snapshot.val();
+
+        if (!snapshot.exists()) {
+            // Tambahkan pengguna baru dengan peran default (misalnya 'user')
+            await set(userRef, {
+                email: user.email,
+                username: user.displayName,
+                role: 'user',
+                verified: false  
+            });
+        }
+
+        return {
+            user,
+            verified: userData.verified,
+            role: userData.role
+        };
+    } catch (error) {
+        console.error("Error signing in with Google:", error);
+        throw error;
     }
-
-    return result;
 }
 
 export const doSignOut = () => {

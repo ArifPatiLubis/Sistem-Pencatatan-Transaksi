@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Navigate, Link, useNavigate, NavLink } from 'react-router-dom'
 import { useAuth } from '../../context/authContext'
 import { doCreateUserWithEmailAndPassword } from '../../firebase/auth'
+import { getDatabase, ref, get } from "firebase/database";
 
 const Register = () => {
 
@@ -14,6 +15,7 @@ const Register = () => {
     const [errorMessage, setErrorMessage] = useState('');
 
     const { userLoggedIn } = useAuth()
+    const database = getDatabase();
 
     const onSubmit = async (e) => {
         e.preventDefault();
@@ -24,8 +26,17 @@ const Register = () => {
         if (!isRegistering) {
             setIsRegistering(true);
             try {
-                await doCreateUserWithEmailAndPassword(email, password, username, 'user'); // 'user' is the default role
-                navigate('/login');
+                const user = await doCreateUserWithEmailAndPassword(email, password, username, 'user'); // 'user' is the default role
+
+                // Check verification status
+                const snapshot = await get(ref(database, 'users/' + user.uid));
+                const userData = snapshot.val();
+
+                if (userData.verified) {
+                    navigate('/');
+                } else {
+                    navigate('/verification');
+                }
             } catch (error) {
                 setErrorMessage(error.message);
                 setIsRegistering(false);

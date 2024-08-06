@@ -6,6 +6,7 @@ import Header from "../../../components/user/header";
 import Footer from "../../../components/user/footer";
 import Sidebar from "../../../components/user/sidebar";
 import ProfilImage from '../../../components/user/profil-image';
+import ChangePasswordUsername from './change-profil';
 
 const Profil = () => {
     const navigate = useNavigate()
@@ -52,42 +53,7 @@ const Profil = () => {
                         <div className="col-md-3">
                             <ProfilImage />
                         </div>
-                        <div className="col-md-9">
-                            <div className="card">
-                                <div className="card-header p-2">
-                                    <ul className="nav nav-pills">
-                                        <li className="nav-item"><a className="nav-link active" style={{backgroundColor: "indigo"}}data-toggle="tab">Change Username</a></li>
-                                    </ul>
-                                </div>
-                                <div className="card-body">
-                                <div className="tab-content">
-                                <div className="active tab-pane" id="settings">
-                                    <form className="form-horizontal" onSubmit={handleSubmit}>
-                                        <div className="form-group row">
-                                        <label htmlFor="inputName" className="col-sm-2 col-form-label">Username</label>
-                                        <div className="col-sm-10">
-                                        <input
-                                            type="text"
-                                            className="form-control"
-                                            name="username"
-                                            id="username"
-                                            placeholder="Type New Username"
-                                            value={username}
-                                            onChange={(e) => setUsername(e.target.value)}
-                                        />
-                                        </div>
-                                        </div>
-                                        <div className="form-group row">
-                                        <div className="offset-sm-2 col-sm-10">
-                                            <button type="submit" className="btn btn-secondary">Submit</button>
-                                        </div>
-                                        </div>
-                                    </form>
-                                    </div>
-                                </div>
-                                </div>
-                            </div>
-                        </div>
+                            <ChangePasswordUsername></ChangePasswordUsername>
                     </div>
                 </div>
             </div>

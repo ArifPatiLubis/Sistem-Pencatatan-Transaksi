@@ -1,6 +1,7 @@
 import React from 'react'
 import { useNavigate, NavLink } from 'react-router-dom'
 import { useAuth } from '../../../../context/authContext'
+import { Button } from 'primereact/button';
 import Header from "../../../../components/admin/header"
 import Footer from "../../../../components/admin/footer"
 import Sidebar from "../../../../components/admin/sidebar"
@@ -30,7 +31,6 @@ const PartyActivity = () => {
                                 <div className="card-header border-0">
                                 <div className="d-flex justify-content-between">
                                     <h3 className="card-title"><b>Party Activities</b></h3>
-                                    <NavLink to="/admin/activities/party/add" className="btn btn-secondary" width="400px"><i class="fas fa-plus-circle mr-3"></i>Add</NavLink>
                                 </div>
                                 </div>
                                 <TablePartyActivity></TablePartyActivity>

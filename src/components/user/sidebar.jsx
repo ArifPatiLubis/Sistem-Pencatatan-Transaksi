@@ -12,7 +12,7 @@ function Sidebar() {
                 <nav className="mt-2">
                     <ul className="nav nav-pills nav-sidebar flex-column text-sm" data-widget="treeview" role="menu" data-accordion="false">
                         <li className="nav-item mt-1">
-                            <NavLink to="/admin/dashboard" className="nav-link">
+                            <NavLink to="/user/dashboard" className="nav-link">
                             <i className="nav-icon fas fa-rocket mr-3" />
                             <p>Dashboard</p>
                             </NavLink>
